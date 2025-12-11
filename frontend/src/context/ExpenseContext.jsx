@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { dummyExpenses } from '../data/dummyData';
+const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
 const ExpenseContext = createContext();
 
@@ -26,7 +27,7 @@ export const ExpenseProvider = ({ children }) => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/expenses', {
+      const response = await fetch(`${API_URL}/api/expenses`, {
         method: 'GET',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -45,7 +46,7 @@ export const ExpenseProvider = ({ children }) => {
       if (!token) return { success: false, error: "No token found" };
       console.log(expense);
 
-      const response = await fetch('http://localhost:5000/api/expenses', {
+      const response = await fetch(`${API_URL}/api/expenses`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -71,7 +72,7 @@ export const ExpenseProvider = ({ children }) => {
   const updateExpense = async (id, updatedExpense) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/expenses/${id}`, {
+      const response = await fetch(`${API_URL}/api/expenses/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -91,7 +92,7 @@ export const ExpenseProvider = ({ children }) => {
   const deleteExpense = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      await fetch(`http://localhost:5000/api/expenses/${id}`, {
+      await fetch(`${API_URL}/api/expenses/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -106,7 +107,7 @@ export const ExpenseProvider = ({ children }) => {
   const searchExpenses = async (keyword) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/expenses/search?keyword=${keyword}`, {
+      const response = await fetch(`${API_URL}/api/expenses/search?keyword=${keyword}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
